@@ -35,7 +35,7 @@ for particle in event:
     particle.zProd(particle.zProd() + particle.pz() / energy * time)
 sec.append(event)
 for idx, particle in enumerate(event):
-    # Add particles and check for collision
+    # Check for collision
     if particle.id() == 2212 and particle.isFinal():
         if count < 3:
             Cas = Cascade(event, idx, sec, number_of_showers, time)
