@@ -25,15 +25,15 @@ class Cascade:
         pythia.readString(f"Beams:eA = {self.primary_event[idx].e()}")
 
         pythia.readString("Beams:idB = 1000070140")
-        pythia.readString("Beams:eB = 14")
+        pythia.readString("Beams:eB = 0")
 
         pythia.readString("Beams:frameType = 3")
         pythia.readString("HeavyIon:SigFitNGen = 0")
-        pythia.readString("HeavyIon:SigFitDefPar = 29.95,2.19,0.60")
         pythia.readString("HardQCD:all = on")
 
         pythia.init()
-        pythia.next()
+        for events in range(5):
+            pythia.next()
         self.event = pythia.event
 
         # transformation matrix
@@ -80,12 +80,11 @@ class Cascade:
             for idx, particle in enumerate(self.event):
                 # Add particles and check for collision
                 if particle.id() == 2212 and particle.isFinal():
-                    Cas = Cascade(self.event, idx, self.sec, self.number_of_showers, self.time)
-                    self.sec = Cas.Continue()
-                    self.count += 1
+                    if self.count < 3:
+                        Cas = Cascade(self.event, idx, self.sec, self.number_of_showers, self.time)
+                        self.sec = Cas.Continue()
+                        self.count += 1
 
-                if self.count > 4:
-                    break
             for sec_event in self.sec:
                 Motion(sec_event, self.time)
             return self.sec
